@@ -142,7 +142,7 @@ describe("Gilded Rose", function() {
     });
   });
 
-  it('"Backstage passes" increases in Quality by 3 when there are 0 <= sellIn days <= 5', () => {
+  it('"Backstage passes" increases in Quality by 3 when there are 0 <  sellIn days <= 5', () => {
     const target = Shop;
 
     const testCases = [5, 1];
