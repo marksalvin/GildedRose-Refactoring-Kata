@@ -25,6 +25,8 @@ const isExpiredBackstagePass = ({ name, sellIn }) => (
   name === 'Backstage passes to a TAFKAL80ETC concert' && sellIn <= 0
 );
 
+const isConjuredManaCake = R.propEq('name', 'Conjured Mana Cake');
+
 /**
  * Updater functions
  */
@@ -55,6 +57,11 @@ const updateOtherItemQuality = item => R.evolve({
   sellIn: R.dec,
 })(item);
 
+const updateConjuredManaCakeQuality = item => R.evolve({
+  quality: quality => setMinimumTo0(item.sellIn <= 0 ? quality - 4 : quality - 2),
+  sellIn: R.dec,
+})(item);
+
 /**
  * Classes
  */
@@ -80,6 +87,7 @@ class Shop {
         [ isBackstagePass6To10, updateBackstagePass6To10Quality ],
         [ isBackstagePass1To5, updateBackstagePass1To5Quality ],
         [ isExpiredBackstagePass, updateExpiredBackstagePassQuality ],
+        [ isConjuredManaCake, item => updateConjuredManaCakeQuality(item) ],
         [ R.T, item => updateOtherItemQuality(item) ],
       ])
     )(this.items);

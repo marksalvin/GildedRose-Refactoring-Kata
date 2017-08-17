@@ -57,15 +57,19 @@ describe("Gilded Rose", function() {
   it('"The Quality of an item is never negative"', () => {
     const target = Shop;
 
-    const targetInstance = new target([
-      new Item('fake item', 10, 0),
-    ]);
+    const testCases = ['fake item', 'Conjured Mana Cake']; // Item names that degrade
 
-    targetInstance.updateQuality();
+    testCases.forEach(testCase => {
+      const targetInstance = new target([
+        new Item(testCase, 10, 0),
+      ]);
 
-    const result = targetInstance.items[0].quality;
+      targetInstance.updateQuality();
 
-    expect(result).toEqual(0);
+      const result = targetInstance.items[0].quality;
+
+      expect(result).toEqual(0);
+    });
   });
 
   it('""Aged Brie" actually increases in Quality the older it gets"', () => {
@@ -100,14 +104,14 @@ describe("Gilded Rose", function() {
     const target = Shop;
 
     const targetInstance = new target([
-      new Item('Sulfuras, Hand of Ragnaros', undefined, 40),
+      new Item('Sulfuras, Hand of Ragnaros', undefined, 80),
     ]);
 
     targetInstance.updateQuality();
 
     const result = targetInstance.items[0].quality;
 
-    expect(result).toEqual(40);
+    expect(result).toEqual(80);
   });
 
   it('"Backstage passes" increases in Quality when there are more than 10 days of sellIn', () => {
@@ -174,18 +178,31 @@ describe("Gilded Rose", function() {
     expect(result).toEqual(0);
   });
 
-  /*it('"Conjured" items degrade in quality twice as fast as normal items', () => {
+  it('"Conjured" items degrade in quality twice as fast as normal items', () => {
     const target = Shop;
 
-    const targetInstance = new target([
-      new Item('Conjured', 1, 5),
-    ]);
+    const testCases = [
+      {
+        input: 5,
+        expected: 3,
+      },
+      {
+        input: 0,
+        expected: 1,
+      },
+    ];
 
-    targetInstance.updateQuality();
+    testCases.forEach(testCase => {
+      const targetInstance = new target([
+        new Item('Conjured Mana Cake', testCase.input, 5),
+      ]);
 
-    const result = targetInstance.items[0].quality;
+      targetInstance.updateQuality();
 
-    expect(result).toEqual(3);
-  });*/
+      const result = targetInstance.items[0].quality;
+
+      expect(result).toEqual(testCase.expected);
+    });
+  });
 
 });
